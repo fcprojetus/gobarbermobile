@@ -1,51 +1,130 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Form, Input } from '@rocketseat/unform';
+import React, { useState, useRef, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import Background from '~/components/Background';
 import { updateProfileRequest } from '~/store/modules/user/actions';
 import { signOut } from '~/store/modules/auth/actions';
 
-import AvatarInput from './AvatarInput';
-import { Container } from './styles';
+import {
+  Container,
+  Title,
+  Separator,
+  Form,
+  FormInput,
+  SubmitButton,
+  LogoutButton,
+} from './styles';
 
 export default function Profile() {
-  const dispatch = useDispatch();
   const profile = useSelector(state => state.user.profile);
+  const dispatch = useDispatch();
+  const emailRef = useRef();
+  const oldPasswordRef = useRef();
+  const passwordRef = useRef();
+  const confirmPasswordRef = useRef();
 
-  function handleSubmit(data) {
-    dispatch(updateProfileRequest(data));
+  const [name, setName] = useState(profile.name);
+  const [email, setEmail] = useState(profile.email);
+  const [oldPassword, setOldPassword] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  useEffect(() => {
+    setOldPassword('');
+    setPassword('');
+    setConfirmPassword('');
+  }, [profile]);
+
+  function handleSubmit() {
+    dispatch(
+      updateProfileRequest({
+        name,
+        email,
+        oldPassword,
+        password,
+        confirmPassword,
+      })
+    );
   }
 
-  function handleSignOut() {
+  function handleLogout() {
     dispatch(signOut());
   }
 
   return (
-    <Container>
-      <Form initialData={profile} onSubmit={handleSubmit}>
-        <AvatarInput name="avatar_id" />
-        <Input name="name" placeholder="Nome Completo" />
-        <Input name="email" placeholder="Seu endereço de e-mail" />
+    <Background>
+      <Container>
+        <Title>Meu Perfil</Title>
+        <Form>
+          <FormInput
+            icon="person-outline"
+            autoCorrect={false}
+            autoCapitalise="none"
+            placeholder="Nome Completo"
+            returnKeyType="next"
+            onSubmitEditing={() => emailRef.current.focus()}
+            value={name}
+            onChangeText={setName}
+          />
 
-        <hr />
+          <FormInput
+            icon="mail-outline"
+            keyboardType="email-address"
+            autoCorrect={false}
+            autoCapitalise="none"
+            placeholder="Digite seu e-mail"
+            ref={emailRef}
+            returnKeyType="next"
+            onSubmitEditing={() => oldPasswordRef.current.focus()}
+            value={email}
+            onChangeText={setEmail}
+          />
 
-        <Input
-          type="password"
-          name="oldPassword"
-          placeholder="Sua senha atual"
-        />
-        <Input type="password" name="password" placeholder="Nova senha" />
-        <Input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirme senha"
-        />
+          <Separator />
 
-        <button type="submit">Atualizar dados</button>
-      </Form>
-      <button type="submit" onClick={handleSignOut}>
-        Sair do GoBarber
-      </button>
-    </Container>
+          <FormInput
+            icon="lock-outline"
+            secureTextEntry
+            placeholder="Sua Senha Atual"
+            ref={oldPasswordRef}
+            returnKeyType="next"
+            onSubmitEditing={() => passwordRef.current.focus()}
+            value={oldPassword}
+            onChangeText={setOldPassword}
+          />
+          <FormInput
+            icon="lock-outline"
+            secureTextEntry
+            placeholder="Sua Nova Senha"
+            ref={passwordRef}
+            returnKeyType="next"
+            onSubmitEditing={() => confirmPasswordRef.current.focus()}
+            value={password}
+            onChangeText={setPassword}
+          />
+          <FormInput
+            icon="lock-outline"
+            secureTextEntry
+            placeholder="Confirme sua Senha"
+            ref={confirmPasswordRef}
+            returnKeyType="send"
+            onSubmitEditing={handleSubmit}
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+          />
+
+          <SubmitButton onPress={handleSubmit}>Atualizar Perfil</SubmitButton>
+          <LogoutButton onPress={handleLogout}>Sair</LogoutButton>
+        </Form>
+      </Container>
+    </Background>
   );
 }
+
+Profile.navigationOptions = {
+  tabBarLabel: 'Meu Perfil',
+  tabBarIcon: ({ tintColor }) => (
+    <Icon name="person" size={20} color={tintColor} />
+  ),
+};

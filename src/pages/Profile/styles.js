@@ -1,74 +1,39 @@
-import styled from 'styled-components';
-import { darken } from 'polished';
+import styled from 'styled-components/native';
+import Input from '~/components/Input';
+import Button from '~/components/Button';
 
-export const Container = styled.div`
-  max-width: 600px;
-  margin: 50px auto;
+export const Container = styled.SafeAreaView`
+  flex: 1;
+`;
+export const Title = styled.Text`
+  font-size: 20px;
+  color: #fff;
+  font-weight: bold;
+  align-self: center;
+  margin-top: 30px;
+`;
+export const Separator = styled.View`
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 20px 0 30px;
+`;
 
-  form {
-    display: flex;
-    flex-direction: column;
-    margin-top: 30px;
+export const Form = styled.ScrollView.attrs({
+  showsVerticalScrollIndicator: false,
+  contentContainerStyle: { padding: 30 },
+})`
+  align-self: stretch;
+`;
 
-    input {
-      background: rgba(0, 0, 0, 0.1);
-      border: 0;
-      border-radius: 5px;
-      height: 44px;
-      padding: 0 15px;
-      color: #fff;
-      margin: 0 0 10px;
+export const FormInput = styled(Input)`
+  margin-bottom: 10px;
+`;
 
-      ::placeholder {
-        color: #eee;
-      }
-    }
+export const SubmitButton = styled(Button)`
+  margin-top: 5px;
+`;
 
-    span {
-      color: #fb6f91;
-      align-self: flex-start;
-      margin: 0 0 10px;
-      font-weight: bold;
-    }
-
-    hr {
-      border: 0;
-      height: 1px;
-      background: rgba(255, 255, 255, 0.2);
-      margin: 10px 0 20px;
-    }
-
-    button {
-      margin: 5px 0 0;
-      height: 44px;
-      background: #3b9eff;
-      font-weight: bold;
-      font-size: 16px;
-      color: #fff;
-      border: 0;
-      border-radius: 5px;
-      transition: background 0.2s
-
-      :hover {
-        background: ${darken(0.15, '#3b9eff')};
-      }
-    }
-  }
-
-  > button {
-    width: 100%;
-    margin: 15px 0 0;
-    height: 44px;
-    background: #f64c75;
-    font-weight: bold;
-    font-size: 16px;
-    color: #fff;
-    border: 0;
-    border-radius: 5px;
-    transition: background 0.2s
-
-      :hover {
-      background: ${darken(0.05, '#f64c75')};
-    }
-  }
+export const LogoutButton = styled(Button)`
+  margin-top: 10px;
+  background: #f64c75;
 `;

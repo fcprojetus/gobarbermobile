@@ -1,40 +1,84 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { Form, Input } from '@rocketseat/unform';
-import * as Yup from 'yup';
+import React, { useRef, useState } from 'react';
+import { Image } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 
+import logo from '~/assets/logo.png';
+
+import Background from '~/components/Background';
 import { signUpResquest } from '~/store/modules/auth/actions';
 
-import logo from '~/assets/logo.svg';
+import {
+  Container,
+  Form,
+  FormInput,
+  SubmitButton,
+  SignLink,
+  SignLinkText,
+} from './styles';
 
-const schema = Yup.object().shape({
-  name: Yup.string().required('O nome é obrigatório'),
-  email: Yup.string()
-    .email('insira um e-mail válido')
-    .required('O email é obrigatório'),
-  password: Yup.string()
-    .min(6, 'No minimo 6 caracteres')
-    .required('A senha é obrigatória'),
-});
-
-export default function SignIn() {
+export default function SignUp({ navigation }) {
   const dispatch = useDispatch();
-  function handleSubmit({ name, email, password }) {
+  const emailRef = useRef();
+  const passwordRef = useRef();
+
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const loading = useSelector(state => state.auth.loading);
+
+  function handleSubmit() {
     dispatch(signUpResquest(name, email, password));
   }
 
   return (
-    <>
-      <img src={logo} alt="GoBarber" />
-      <Form schema={schema} onSubmit={handleSubmit}>
-        <Input name="name" placeholder="Nome Completo" />
-        <Input name="email" type="email" placeholder="Seu email" />
-        <Input name="password" type="password" placeholder="Sua senha" />
+    <Background>
+      <Container>
+        <Image source={logo} />
+        <Form>
+          <FormInput
+            icon="person-outline"
+            autoCorrect={false}
+            autoCapitalise="none"
+            placeholder="Nome Completo"
+            returnKeyType="next"
+            onSubmitEditing={() => emailRef.current.focus()}
+            value={name}
+            onChangeText={setName}
+          />
 
-        <button type="submit">Criar Conta</button>
-        <Link to="/">Já tenho conta</Link>
-      </Form>
-    </>
+          <FormInput
+            icon="mail-outline"
+            keyboardType="email-address"
+            autoCorrect={false}
+            autoCapitalise="none"
+            placeholder="Digite seu e-mail"
+            ref={emailRef}
+            returnKeyType="next"
+            onSubmitEditing={() => passwordRef.current.focus()}
+            value={email}
+            onChangeText={setEmail}
+          />
+
+          <FormInput
+            icon="lock-outline"
+            secureTextEntry
+            placeholder="Digite sua senha"
+            ref={passwordRef}
+            returnKeyType="send"
+            onSubmitEditing={handleSubmit}
+            value={password}
+            onChangeText={setPassword}
+          />
+          <SubmitButton loading={loading} onPress={handleSubmit}>
+            Criar Conta
+          </SubmitButton>
+        </Form>
+
+        <SignLink onPress={() => navigation.navigate('SignIn')}>
+          <SignLinkText>Já tenho conta</SignLinkText>
+        </SignLink>
+      </Container>
+    </Background>
   );
 }
