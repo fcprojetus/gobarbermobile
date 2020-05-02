@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">modulo10</string>
+    <string name="app_name">Gobarber Mobile</string>
+    <string name="CodePushDeploymentKey">dca0a476-6d4d-44eb-83ad-0ec8f9571e26</string>
 </resources>
