@@ -139,7 +139,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.gobarbermobile"
+        applicationId "com.modulo10"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -163,14 +163,21 @@ android {
     }
     buildTypes {
         debug {
-            signingConfig signingConfigs.debug
+          // signingConfig signingConfigs.debug
+          buildConfigField "String", "CODEPUSH_KEY", '""'
+        }
+        releaseStaging {
+            buildConfigField "String", "CODEPUSH_KEY", '"Kt0d08yYjtTkE_O9fCjF7ZrvxDaqDIRm_dJSX"'
+            matchingFallbacks = ['debug', 'release']
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://facebook.github.io/react-native/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            // signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            buildConfigField "String", "CODEPUSH_KEY", '"QHkrfp-ZqnNbuuLnuzmbM_mil8GqILbnqufCN"'
+
         }
     }
     // applicationVariants are e.g. debug, release
