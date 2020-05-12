@@ -160,6 +160,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            storeFile file('gobarber.keystore')
+            storePassword '3105fcfc'
+            keyAlias 'gobarber'
+            keyPassword '3105fcfc'
+        }
     }
     buildTypes {
         debug {
